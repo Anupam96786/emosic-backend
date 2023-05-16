@@ -3,6 +3,7 @@ from rest_framework.response import Response
 import librosa
 import datetime
 import os
+import emosic_essentials
 
 
 @api_view(['POST'])
@@ -14,6 +15,6 @@ def home(request):
         for chunk in f.chunks():
             destination.write(chunk)
     y, sr = librosa.load(webm_file, sr=22050)
-    print(y)
+    print(emosic_essentials.AudioAnalysis().get_features(y, sr))
     os.remove(webm_file)
     return Response({})
