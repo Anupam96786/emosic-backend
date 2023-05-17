@@ -19,11 +19,11 @@ with open(os.path.join(settings.BASE_DIR, 'feature_transcoder.pckl'), 'rb') as f
 @api_view(['POST'])
 def home(request):
     time = str(datetime.datetime.now())
-    webm_file = time + '.webm'
+    wav_file = time + '.wav'
     f = request.FILES['audio']
-    with open(webm_file, 'wb+') as destination:
+    with open(wav_file, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
-    y, sr = librosa.load(webm_file, sr=22050)
-    os.remove(webm_file)
+    y, sr = librosa.load(wav_file, sr=22050)
+    os.remove(wav_file)
     return Response({'emotion': a.decode(TRAINED_MODEL.predict(np.expand_dims(np.array(AudioAnalysis().get_features(y, sr)), 1).reshape(1, -1))[0].tolist())})
