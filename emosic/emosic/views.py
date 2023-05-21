@@ -26,4 +26,5 @@ def home(request):
             destination.write(chunk)
     y, sr = librosa.load(wav_file, sr=22050)
     os.remove(wav_file)
-    return Response({'emotion': a.decode(TRAINED_MODEL.predict(np.expand_dims(np.array(AudioAnalysis().get_features(y, sr)), 1).reshape(1, -1))[0].tolist())})
+    features = np.expand_dims(np.array(AudioAnalysis().get_features(y, sr)), 1).reshape(1, -1)
+    return Response({'emotion': a.decode(TRAINED_MODEL.predict(features)[0].tolist()), 'features': features[0]})
