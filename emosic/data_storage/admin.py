@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Emotion, AudioData, Music
 
-# Register your models here.
+admin.site.register(Emotion)
+admin.site.register(AudioData)
+admin.site.register(Music)
