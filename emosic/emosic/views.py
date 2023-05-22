@@ -8,6 +8,8 @@ from keras.models import load_model
 from django.conf import settings
 import numpy as np
 import pickle
+from data_storage.models import Emotion, AudioData, Music
+import json
 
 
 TRAINED_MODEL = load_model(os.path.join(settings.BASE_DIR, 'model-0.8723.h5'))
@@ -28,3 +30,10 @@ def home(request):
     os.remove(wav_file)
     features = np.expand_dims(np.array(AudioAnalysis().get_features(y, sr)), 1).reshape(1, -1)
     return Response({'emotion': a.decode(TRAINED_MODEL.predict(features)[0].tolist()), 'features': features[0]})
+
+
+@api_view(['POST'])
+def feedback(request):
+    emotion = Emotion.objects.get(name=request.data['emotion'])
+    AudioData.objects.create(features=request.data['features'], emotion=emotion)
+    return Response({'music_url': Music.objects.get(emotion=emotion).url})

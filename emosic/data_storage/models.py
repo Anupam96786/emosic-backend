@@ -6,7 +6,7 @@ class Emotion(models.Model):
 
 
 class AudioData(models.Model):
-    features = models.TextField()
+    features = models.JSONField()
     emotion = models.ForeignKey(Emotion, on_delete=models.CASCADE)
 
 
