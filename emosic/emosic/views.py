@@ -9,7 +9,7 @@ from django.conf import settings
 import numpy as np
 import pickle
 from data_storage.models import Emotion, AudioData, Music
-import json
+import random
 
 
 TRAINED_MODEL = load_model(os.path.join(settings.BASE_DIR, 'model-0.8723.h5'))
@@ -36,4 +36,4 @@ def home(request):
 def feedback(request):
     emotion = Emotion.objects.get(name=request.data['emotion'])
     AudioData.objects.create(features=request.data['features'], emotion=emotion)
-    return Response({'music_url': Music.objects.get(emotion=emotion).url})
+    return Response({'music_url': random.choice(list(Music.objects.filter(emotion=emotion))).url})
